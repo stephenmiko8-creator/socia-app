@@ -51,6 +51,7 @@ export const authOptions = {
       name: "TikTok",
       type: "oauth",
       version: "2.0",
+      allowDangerousEmailAccountLinking: true,
       checks: ["pkce", "state"],
       authorization: {
         url: `https://www.tiktok.com/v2/auth/authorize?client_key=${process.env.TIKTOK_CLIENT_KEY || "aw8v2r19cmj7b4ao"}`,
