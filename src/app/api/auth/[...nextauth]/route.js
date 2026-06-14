@@ -84,6 +84,7 @@ export const authOptions = {
         return {
           id: profile?.data?.user?.open_id || "tiktok_dummy_id",
           name: profile?.data?.user?.display_name || "TikTok User",
+          email: `${profile?.data?.user?.open_id || "tiktok_dummy_id"}@tiktok.com`,
           image: profile?.data?.user?.avatar_url,
         }
       },
