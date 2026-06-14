@@ -58,7 +58,7 @@ export const authOptions = {
         params: {
           response_type: "code",
           scope: "user.info.basic",
-          redirect_uri: (process.env.NEXTAUTH_URL ? process.env.NEXTAUTH_URL.replace(/\/$/, "") : (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000")) + "/api/test-tiktok",
+          redirect_uri: (process.env.NEXTAUTH_URL ? process.env.NEXTAUTH_URL.replace(/\/$/, "") : (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000")) + "/api/auth/callback/tiktok",
         },
       },
       token: {
@@ -80,12 +80,21 @@ export const authOptions = {
           return { tokens };
         }
       },
-      userinfo: "https://open.tiktokapis.com/v2/user/info/?fields=open_id,display_name,avatar_url",
+      userinfo: {
+        url: "https://open.tiktokapis.com/v2/user/info/?fields=open_id,display_name,avatar_url",
+        async request(context) {
+          const { tokens, provider } = context;
+          const response = await fetch(provider.userinfo.url, {
+            headers: { Authorization: `Bearer ${tokens.access_token}` },
+          });
+          return await response.json();
+        }
+      },
       profile(profile) {
         return {
           id: profile?.data?.user?.open_id || "tiktok_dummy_id",
           name: profile?.data?.user?.display_name || "TikTok User",
-          email: `${profile?.data?.user?.open_id || "tiktok_dummy_id"}@tiktok.com`,
+          email: `${profile?.data?.user?.open_id || "tiktok_dummy_id"}_${Date.now()}@tiktok.com`,
           image: profile?.data?.user?.avatar_url,
         }
       },
