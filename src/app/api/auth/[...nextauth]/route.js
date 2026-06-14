@@ -58,7 +58,7 @@ export const authOptions = {
         params: {
           response_type: "code",
           scope: "user.info.basic",
-          redirect_uri: (process.env.NEXTAUTH_URL ? process.env.NEXTAUTH_URL.replace(/\/$/, "") : (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000")) + "/api/auth/callback/tiktok",
+          redirect_uri: (process.env.NEXTAUTH_URL ? process.env.NEXTAUTH_URL.replace(/\/$/, "") : (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000")) + "/api/test-tiktok",
         },
       },
       token: {
