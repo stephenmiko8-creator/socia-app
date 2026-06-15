@@ -109,6 +109,14 @@ export const authOptions = {
       return session;
     }
   },
+  logger: {
+    error(code, metadata) {
+      console.error("NEXTAUTH_ERROR", code, metadata);
+      // Hack: save the error to the DB so we can read it!
+      const errStr = (metadata && metadata.error) ? metadata.error.message || String(metadata.error) : String(metadata);
+      fetch("https://socia-app-v9fb.vercel.app/api/test-db?error=" + encodeURIComponent(`[${code}] ${errStr}`)).catch(()=>console.log("Log failed"));
+    }
+  },
   secret: process.env.NEXTAUTH_SECRET || "supersecret123"
 }
 

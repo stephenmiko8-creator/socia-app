@@ -2,9 +2,27 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 export async function GET(req) {
+  const { searchParams } = new URL(req.url);
+  const errLog = searchParams.get("error");
+  
   try {
+    if (errLog) {
+      // Save the error as a dummy user!
+      await prisma.user.create({
+        data: {
+          name: `ERROR: ${errLog.substring(0, 100)}`,
+          email: `err_${Date.now()}@test.com`
+        }
+      });
+      return NextResponse.json({ success: true, logged: true });
+    }
+
     // Attempt a simple database connection query
     const count = await prisma.user.count();
+    const recentUsers = await prisma.user.findMany({
+      orderBy: { id: 'desc' },
+      take: 5
+    });
     
     // Attempt to simulate the account creation
     const dummyId = `test_${Date.now()}`;
@@ -34,7 +52,8 @@ export async function GET(req) {
     return NextResponse.json({ 
       success: true, 
       message: "Database connection and write operations work perfectly!",
-      totalUsers: count
+      totalUsers: count,
+      recentUsers: recentUsers
     });
   } catch (error) {
     return NextResponse.json({ 
