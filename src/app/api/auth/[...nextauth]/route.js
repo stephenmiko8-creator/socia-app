@@ -76,7 +76,15 @@ export const authOptions = {
               redirect_uri: provider.authorization.params.redirect_uri,
             }),
           });
-          const tokens = await response.json();
+          const rawTokens = await response.json();
+          // FILTER out unknown fields to prevent PrismaClientValidationError!
+          const tokens = {
+            access_token: rawTokens.access_token,
+            refresh_token: rawTokens.refresh_token,
+            expires_in: rawTokens.expires_in,
+            token_type: rawTokens.token_type,
+            scope: rawTokens.scope,
+          };
           return { tokens };
         }
       },

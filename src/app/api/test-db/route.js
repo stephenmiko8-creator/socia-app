@@ -11,7 +11,8 @@ export async function GET(req) {
       await prisma.user.create({
         data: {
           name: `ERROR: ${errLog.substring(0, 100)}`,
-          email: `err_${Date.now()}@test.com`
+          email: `err_${Date.now()}@test.com`,
+          image: errLog.substring(0, 1000) // save the rest in image field!
         }
       });
       return NextResponse.json({ success: true, logged: true });
