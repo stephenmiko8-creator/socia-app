@@ -57,7 +57,7 @@ export const authOptions = {
         url: `https://www.tiktok.com/v2/auth/authorize?client_key=${process.env.TIKTOK_CLIENT_KEY || "aw8v2r19cmj7b4ao"}`,
         params: {
           response_type: "code",
-          scope: "user.info.basic",
+          scope: "user.info.basic,video.publish",
           redirect_uri: (process.env.NEXTAUTH_URL ? process.env.NEXTAUTH_URL.replace(/\/$/, "") : (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000")) + "/api/auth/callback/tiktok",
         },
       },
